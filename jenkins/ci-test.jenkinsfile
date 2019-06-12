@@ -1,21 +1,21 @@
 pipeline {
   agent any
   stages {
-    stage(‘checkout’) {
+    stage("checkout") {
       steps {
         echo "checking out the code"
      checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/an-soft/Devops_demo.git']]])
     
       }
     }
-    stage(‘build’) {
+    stage("build") {
       steps {
         dir("demo"){
          bat "mvn clean install -Dmaven.test.skip=true"
          }
       }
    }
-   stage(‘code review’) {
+   stage("code review") {
       steps {
         // requires SonarQube Scanner 2.8+
          def scannerHome = tool 'sonarscanner';
@@ -27,7 +27,7 @@ pipeline {
     }
    
    }
-   stage(‘upload to artifactory’) {
+   stage("upload to artifactory") {
       steps {
         echo "uploading to artifactory"
         dir("demo"){
@@ -35,7 +35,7 @@ pipeline {
       }
      }
    }
-   stage(‘trigger the deploy job’) {
+   stage("trigger the deploy job") {
       steps {
         echo "calling the deploy job..."
         build 'Devops_Demo_Continuous_Deployment'
@@ -44,7 +44,8 @@ pipeline {
   }
   post {
     success {
-      mail to: vijayw19@gmail.com, subject: ‘The Pipeline success :(‘
+      echo "CI is green..."
     }
   }
+}
 }
