@@ -8,6 +8,7 @@ public class HelloController {
 
     @RequestMapping("/hello")
     public String getHelloMessage() {
+        //TODO injecting sonar issue
         return "Hello World Demo";
     }
 }
