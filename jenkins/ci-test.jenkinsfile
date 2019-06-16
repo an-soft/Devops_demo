@@ -1,0 +1,51 @@
+pipeline {
+  agent any
+  stages {
+    stage("checkout") {
+      steps {
+        echo "checking out the code"
+     checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/an-soft/Devops_demo.git']]])
+    
+      }
+    }
+    stage("build") {
+      steps {
+        dir("demo"){
+         bat "mvn clean install -Dmaven.test.skip=true"
+         }
+      }
+   }
+   stage("code review") {
+      steps {
+        // requires SonarQube Scanner 2.8+
+         def scannerHome = tool 'sonarscanner';
+         withSonarQubeEnv('My SonarQube Server') {
+        //bat "${scannerHome}/bin/sonar-runner.bat"
+        dir("demo"){
+        bat "mvn sonar:sonar"
+      }
+    }
+   
+   }
+   stage("upload to artifactory") {
+      steps {
+        echo "uploading to artifactory"
+        dir("demo"){
+          bat "mvn clean deploy"
+      }
+     }
+   }
+   stage("trigger the deploy job") {
+      steps {
+        echo "calling the deploy job..."
+        build 'Devops_Demo_Continuous_Deployment'
+    }
+   }
+  }
+  post {
+    success {
+      echo "CI is green..."
+    }
+  }
+}
+}
