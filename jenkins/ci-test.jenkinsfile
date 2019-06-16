@@ -15,7 +15,7 @@ pipeline {
          }
       }
    }
-   stage("code review") {
+   stage('code review') {
       steps {
         // requires SonarQube Scanner 2.8+
          def scannerHome = tool 'sonarscanner';
@@ -26,8 +26,8 @@ pipeline {
       }
     }
    
-   }
-   stage("upload to artifactory") {
+   
+   stage('upload to artifactory') {
       steps {
         echo "uploading to artifactory"
         dir("demo"){
@@ -35,7 +35,7 @@ pipeline {
       }
      }
    }
-   stage("trigger the deploy job") {
+   stage('trigger the deploy job') {
       steps {
         echo "calling the deploy job..."
         build 'Devops_Demo_Continuous_Deployment'
