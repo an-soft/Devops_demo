@@ -14,7 +14,7 @@ public class DemoApplicationTests {
 
    @Test
    public void testPrintMessage() {
-      assertEquals(message,"Hello World");
+      assertEquals("Hello World", message);
    }
 
 }
