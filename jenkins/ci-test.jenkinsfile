@@ -15,6 +15,7 @@ pipeline {
          }
       }
    }
+   }
    stage('code review') {
       steps {
         // requires SonarQube Scanner 2.8+
