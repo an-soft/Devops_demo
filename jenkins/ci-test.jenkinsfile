@@ -11,25 +11,24 @@ pipeline {
     stage('build') {
       steps {
         dir("demo"){
-         bat "mvn clean install -Dmaven.test.skip=true"
+         bat "mvn clean install -Dmaven.test.skip=false"
          }
       }
    
    }
    stage('code review') {
-      steps {
-        // requires SonarQube Scanner 2.8+
-        step{
+       steps {
+           script {
          def scannerHome = tool 'sonarscanner';
          withSonarQubeEnv('My SonarQube Server') {
-        //bat "${scannerHome}/bin/sonar-runner.bat"
-        dir("demo"){
-        bat "mvn sonar:sonar"
+           
+            dir("demo"){
+            bat "mvn sonar:sonar"
+             }
+         }
+         }
       }
-      }
-    }
    }
-   
    stage('upload to artifactory') {
       steps {
         echo "uploading to artifactory"
@@ -41,14 +40,15 @@ pipeline {
    stage('trigger the deploy job') {
       steps {
         echo "calling the deploy job..."
-        build 'Devops_Demo_Continuous_Deployment'
+        build job: "Devops_Demo_Continuous_Deployment", wait: false
     }
    }
   }
   post {
         always {
-            junit 'build/reports/**/*.xml'
+            //junit 'build/reports/**/*.xml'
+            junit allowEmptyResults: true, testResults: 'target/surefire-reports/*.xml'
         }
     }
-}
+
 }
