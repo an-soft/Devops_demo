@@ -19,11 +19,13 @@ pipeline {
    stage('code review') {
       steps {
         // requires SonarQube Scanner 2.8+
+        step{
          def scannerHome = tool 'sonarscanner';
          withSonarQubeEnv('My SonarQube Server') {
         //bat "${scannerHome}/bin/sonar-runner.bat"
         dir("demo"){
         bat "mvn sonar:sonar"
+      }
       }
     }
    }
