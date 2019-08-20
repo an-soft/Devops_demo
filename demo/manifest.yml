@@ -1,5 +1,5 @@
 ---
 applications:
-- name: demo-new
+- name: demo-devops-new
   path: target/demo-0.0.1-SNAPSHOT.jar
   #buildpack: java_buildpack_offline
