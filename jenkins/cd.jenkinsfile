@@ -17,7 +17,8 @@ node{
     dir("demo"){
       bat "mvn clean install"
      
-    pushToCloudFoundry cloudSpace: 'development', credentialsId: 'PCF_Credential', organization: 'vizaybug-org', target: 'api.run.pivotal.io'
+    //pushToCloudFoundry cloudSpace: 'development', credentialsId: 'PCF_Credential', organization: 'vizaybug-org', target: 'api.run.pivotal.io'
+    pushToCloudFoundry cloudSpace: 'development', credentialsId: 'PCF_Credential_new', organization: 'vijayw19', target: 'api.run.pivotal.io'
     }  
     }
 }
